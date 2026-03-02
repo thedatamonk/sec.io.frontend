@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -8,6 +9,8 @@ import { useAnalysis } from "@/hooks/use-analysis";
 import { useCompanyLookup } from "@/hooks/use-company-lookup";
 
 export default function App() {
+  const [mode, setMode] = useState<"single" | "multi">("single");
+
   const {
     messages,
     currentAnalysis,
@@ -16,7 +19,7 @@ export default function App() {
     errorStatus,
     sendMessage,
     resetConversation,
-  } = useChat();
+  } = useChat(mode);
 
   const analysis = useAnalysis(currentAnalysis);
   const { ticker, company, isLooking, lookupError, lookup } =
@@ -32,7 +35,7 @@ export default function App() {
         onTickerChange={lookup}
       />
       <div className="flex flex-col flex-1 min-w-0">
-        <Header onReset={resetConversation} />
+        <Header onReset={resetConversation} mode={mode} onModeChange={setMode} />
         <MainLayout
           chatPanel={
             <ChatPanel
@@ -47,6 +50,7 @@ export default function App() {
               isLoading={isLoading}
               error={error}
               errorStatus={errorStatus}
+              mode={mode}
             />
           }
         />

@@ -45,8 +45,12 @@ export function getCompany(ticker: string): Promise<CompanyInfo> {
   return request<CompanyInfo>(ENDPOINTS.company(ticker));
 }
 
-export function postChat(body: ChatRequest): Promise<ChatResponse> {
-  return request<ChatResponse>(ENDPOINTS.chat, {
+export function postChat(
+  body: ChatRequest,
+  mode: "single" | "multi" = "single"
+): Promise<ChatResponse> {
+  const qs = mode === "multi" ? "?mode=multi" : "";
+  return request<ChatResponse>(`${ENDPOINTS.chat}${qs}`, {
     method: "POST",
     body: JSON.stringify(body),
   });

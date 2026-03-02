@@ -8,7 +8,7 @@ function nextId(): string {
   return `msg-${++messageCounter}-${Date.now()}`;
 }
 
-export function useChat() {
+export function useChat(mode: "single" | "multi" = "single") {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [conversationHistory, setConversationHistory] = useState<
     ConversationMessage[]
@@ -50,10 +50,10 @@ export function useChat() {
       setIsLoading(true);
 
       try {
-        const response = await postChat({
-          message: content,
-          conversation_history: conversationHistory,
-        });
+        const response = await postChat(
+          { message: content, conversation_history: conversationHistory },
+          mode
+        );
 
         setConversationHistory([
           ...conversationHistory,
@@ -97,7 +97,7 @@ export function useChat() {
         setIsLoading(false);
       }
     },
-    [conversationHistory, isLoading],
+    [conversationHistory, isLoading, mode],
   );
 
   const resetConversation = useCallback(() => {

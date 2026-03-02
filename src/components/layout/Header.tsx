@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { getHealth } from "@/lib/api-client";
 
 interface HeaderProps {
   onReset: () => void;
+  mode: "single" | "multi";
+  onModeChange: (mode: "single" | "multi") => void;
 }
 
-export function Header({ onReset }: HeaderProps) {
+export function Header({ onReset, mode, onModeChange }: HeaderProps) {
   const [healthy, setHealthy] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -51,10 +54,25 @@ export function Header({ onReset }: HeaderProps) {
           </span>
         </div>
       </div>
-      <Button variant="ghost" size="sm" onClick={onReset}>
-        <RotateCcw className="h-4 w-4 mr-1.5" />
-        New Analysis
-      </Button>
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 text-xs">
+          <span className={mode === "single" ? "text-foreground" : "text-muted-foreground"}>
+            Single Agent
+          </span>
+          <Switch
+            checked={mode === "multi"}
+            onCheckedChange={(checked) => onModeChange(checked ? "multi" : "single")}
+            aria-label="Toggle multi-agent mode"
+          />
+          <span className={mode === "multi" ? "text-blue-400 font-medium" : "text-muted-foreground"}>
+            Multi-Agent
+          </span>
+        </div>
+        <Button variant="ghost" size="sm" onClick={onReset}>
+          <RotateCcw className="h-4 w-4 mr-1.5" />
+          New Analysis
+        </Button>
+      </div>
     </header>
   );
 }

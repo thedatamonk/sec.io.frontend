@@ -12,6 +12,7 @@ export interface SourceCitation {
 export interface ChatResponse {
   answer: string;
   citations: SourceCitation[];
+  scratchpad?: Record<string, unknown>;
 }
 
 // --- financial.py ---

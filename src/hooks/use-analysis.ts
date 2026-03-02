@@ -9,6 +9,7 @@ export function useAnalysis(analysis: ChatResponse | null) {
     return {
       citations: analysis.citations,
       summary: analysis.answer,
+      scratchpad: analysis.scratchpad,
     };
   }, [analysis]);
 }
